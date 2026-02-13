@@ -4,6 +4,9 @@ import fr.elias.oreoEssentials.util.RankedMessageUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.SoundCategory;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,7 +48,6 @@ public final class JoinMessagesListener implements Listener {
         final String playerPrefixFmt = c.getString(SECTION + ".player_prefix", "");
         final String delimiter       = c.getString(SECTION + ".delimiter", " | ");
 
-
         String defaultBody = c.getString(
                 firstJoin ? (SECTION + ".first_join") : (SECTION + ".rejoin_message"),
                 "{name} joined the game."
@@ -54,7 +56,6 @@ public final class JoinMessagesListener implements Listener {
         String key = firstJoin ? "first_join" : "rejoin_message";
         String body = RankedMessageUtil.resolveRankedText(c, SECTION, key, p, defaultBody);
 
-        // Replace placeholders
         final String namePlain = p.getName();
         final String playerName = playerNameFmt.replace("{name}", namePlain);
         body = body.replace("{name}", namePlain);
@@ -63,16 +64,62 @@ public final class JoinMessagesListener implements Listener {
                 ? (playerPrefixFmt + " " + playerName + " " + delimiter + " " + body)
                 : body;
 
+        // Resolve per-rank sound
+        final ResolvedSound sound = resolveSound(c, SECTION, p);
+
         long delayTicks = Math.max(0L, c.getLong(SECTION + ".join_message_delay", 0L) * 20L);
 
         Runnable send = () -> {
             String legacyMsg = legacy.serialize(mm.deserialize(output));
-            Bukkit.getOnlinePlayers().forEach(pl -> pl.sendMessage(legacyMsg));
+            for (Player pl : Bukkit.getOnlinePlayers()) {
+                pl.sendMessage(legacyMsg);
+                if (sound != null) {
+                    pl.playSound(pl.getLocation(), sound.key(), SoundCategory.PLAYERS,
+                            sound.volume(), sound.pitch());
+                }
+            }
         };
 
         if (delayTicks > 0) Bukkit.getScheduler().runTaskLater(plugin, send, delayTicks);
         else Bukkit.getScheduler().runTask(plugin, send);
     }
+
+    // ─── Sound resolution ───
+
+    private static ResolvedSound resolveSound(FileConfiguration c, String section, Player p) {
+        ConfigurationSection sounds = c.getConfigurationSection(section + ".sounds");
+        if (sounds == null) return null;
+
+        float defVolume = (float) sounds.getDouble("volume", 1.0);
+        float defPitch  = (float) sounds.getDouble("pitch", 1.0);
+        String defSound = sounds.getString("default", null);
+
+        List<?> formats = sounds.getList("formats");
+        if (formats != null) {
+            ConfigurationSection fmtSec = sounds.getConfigurationSection("formats");
+            // formats is a list of maps, iterate via parent
+            var rawList = sounds.getMapList("formats");
+            for (var map : rawList) {
+                Object perm = map.get("permission");
+                Object snd  = map.get("sound");
+                if (perm == null || snd == null) continue;
+                if (p.hasPermission(perm.toString())) {
+                    float vol = map.containsKey("volume") ? ((Number) map.get("volume")).floatValue() : defVolume;
+                    float pit = map.containsKey("pitch")  ? ((Number) map.get("pitch")).floatValue()  : defPitch;
+                    return new ResolvedSound(snd.toString(), vol, pit);
+                }
+            }
+        }
+
+        if (defSound != null && !defSound.isEmpty()) {
+            return new ResolvedSound(defSound, defVolume, defPitch);
+        }
+        return null;
+    }
+
+    private record ResolvedSound(String key, float volume, float pitch) {}
+
+
 
     private boolean shouldDisableBackend(FileConfiguration c, String section) {
         if (!c.getBoolean(section + ".disable_on_backend", false)) return false;
@@ -81,9 +128,7 @@ public final class JoinMessagesListener implements Listener {
         List<String> list = c.getStringList(section + ".backend_server_names");
         String mode = c.getString(section + ".use_backend_list_as", "blacklist");
 
-        if (list == null || list.isEmpty()) {
-            return true;
-        }
+        if (list == null || list.isEmpty()) return true;
 
         boolean contains = list.stream().anyMatch(s -> s != null && s.equalsIgnoreCase(serverName));
         if ("whitelist".equalsIgnoreCase(mode)) return !contains;

@@ -209,8 +209,9 @@ public class AfkService implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent e) {
-        touch(e.getPlayer());
+        Bukkit.getScheduler().runTask(plugin, () -> touch(e.getPlayer()));
     }
+
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCommand(PlayerCommandPreprocessEvent e) {

@@ -1,21 +1,76 @@
 package fr.elias.oreoEssentials.modules.afk;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.*;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.Plugin;
 
 public class AfkListener implements Listener {
+
+    private final Plugin plugin;
     private final AfkService afk;
 
-    public AfkListener(AfkService afk) { this.afk = afk; }
+    public AfkListener(Plugin plugin, AfkService afk) {
+        this.plugin = plugin;
+        this.afk = afk;
+    }
 
-    private void nuke(Player p) { afk.clearAfk(p); }
 
-    @EventHandler public void onMove(PlayerMoveEvent e) { if (!e.getFrom().toVector().equals(e.getTo().toVector())) nuke(e.getPlayer()); }
-    @EventHandler public void onChat(AsyncPlayerChatEvent e) { nuke(e.getPlayer()); }
-    @EventHandler public void onInteract(PlayerInteractEvent e) { nuke(e.getPlayer()); }
-    @EventHandler public void onCommand(PlayerCommandPreprocessEvent e) {
-        if (!e.getMessage().toLowerCase().startsWith("/afk")) nuke(e.getPlayer());
+    private void onActivity(Player player) {
+        if (player == null) return;
+
+        if (!afk.isAfk(player)) {
+            return;
+        }
+
+        afk.clearAfk(player);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onMove(PlayerMoveEvent e) {
+        if (e.getFrom().getBlockX() == e.getTo().getBlockX()
+                && e.getFrom().getBlockY() == e.getTo().getBlockY()
+                && e.getFrom().getBlockZ() == e.getTo().getBlockZ()) {
+            return;
+        }
+
+        onActivity(e.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onInteract(PlayerInteractEvent e) {
+        onActivity(e.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onCommand(PlayerCommandPreprocessEvent e) {
+        String msg = e.getMessage();
+        if (msg == null || msg.isEmpty()) return;
+
+        if (isAfkCommand(msg)) return;
+
+        onActivity(e.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onChat(AsyncPlayerChatEvent e) {
+        Player p = e.getPlayer();
+        Bukkit.getScheduler().runTask(plugin, () -> onActivity(p));
+    }
+
+    private boolean isAfkCommand(String message) {
+        if (message.length() < 4) return false;
+
+        if (!message.regionMatches(true, 0, "/afk", 0, 4)) {
+            return false;
+        }
+
+        return message.length() == 4 || Character.isWhitespace(message.charAt(4));
     }
 }

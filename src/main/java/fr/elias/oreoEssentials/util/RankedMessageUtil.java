@@ -9,22 +9,17 @@ import java.util.Map;
 public final class RankedMessageUtil {
 
     private RankedMessageUtil() {
-        // util
     }
 
-    /**
-     * Resolves a ranked message list based on permissions.
-     *
-     * Config path:
-     * <baseSection>.formats.<key>:
-     *   - permission: "oreo.rank.vip"
-     *     text: "..."
-     *
-     * Example:
-     * Join_messages.formats.rejoin_message
-     */
-    public static String resolveRankedText(FileConfiguration c, String baseSection, String key, Player p, String fallback) {
-        if (c == null || p == null) return fallback;
+
+    public static String resolveRankedText(FileConfiguration c,
+                                           String baseSection,
+                                           String key,
+                                           Player p,
+                                           String fallback) {
+
+        if (fallback == null) fallback = "";
+        if (c == null || p == null || baseSection == null || key == null) return fallback;
 
         String listPath = baseSection + ".formats." + key;
 
@@ -34,14 +29,22 @@ public final class RankedMessageUtil {
         for (Map<?, ?> map : list) {
             if (map == null) continue;
 
-            String perm = String.valueOf(map.getOrDefault("permission", "")).trim();
-            String text = String.valueOf(map.getOrDefault("text", "")).trim();
+            String perm = getString(map, "permission");
+            String text = getString(map, "text");
 
-            if (!perm.isEmpty() && !text.isEmpty() && p.hasPermission(perm)) {
+            if (perm.isEmpty() || text.isEmpty()) continue;
+
+            if (p.hasPermission(perm)) {
                 return text;
             }
         }
 
         return fallback;
+    }
+
+    private static String getString(Map<?, ?> map, String key) {
+        if (map == null || key == null) return "";
+        Object value = map.get(key);
+        return value == null ? "" : String.valueOf(value).trim();
     }
 }

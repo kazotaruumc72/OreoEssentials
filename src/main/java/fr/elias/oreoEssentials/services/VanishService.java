@@ -1,4 +1,3 @@
-// File: src/main/java/fr/elias/oreoEssentials/services/VanishService.java
 package fr.elias.oreoEssentials.services;
 
 import org.bukkit.Bukkit;

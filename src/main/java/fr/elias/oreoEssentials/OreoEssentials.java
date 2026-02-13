@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import fr.elias.oreoEssentials.modules.afk.AfkListener;
 import fr.elias.oreoEssentials.modules.afk.rabbit.packets.AfkPoolEnterPacket;
 import fr.elias.oreoEssentials.modules.afk.rabbit.packets.AfkPoolExitPacket;
+import fr.elias.oreoEssentials.modules.auctionhouse.AuctionHouseModule;
+import fr.elias.oreoEssentials.modules.auctionhouse.commands.*;
+import fr.elias.oreoEssentials.modules.auctionhouse.hooks.AuctionPlaceholders;
 import fr.elias.oreoEssentials.modules.autoreboot.AutoRebootService;
 import fr.elias.oreoEssentials.modules.back.rabbit.packets.BackTeleportPacket;
 import fr.elias.oreoEssentials.modules.bossbar.BossBarService;
@@ -224,6 +227,7 @@ public final class OreoEssentials extends JavaPlugin {
     private CurrencyConfig currencyConfig;
     private CommandToggleConfig commandToggleConfig;
     private CommandToggleService commandToggleService;
+    private AuctionHouseModule auctionHouse;
 
     public CurrencyService getCurrencyService() { return currencyService; }
     public CurrencyConfig getCurrencyConfig() { return currencyConfig; }
@@ -718,9 +722,10 @@ public final class OreoEssentials extends JavaPlugin {
         getLogger().info("[BOOT] Registered proxy plugin messaging channels.");
         this.afkService = new AfkService(this);
         getServer().getPluginManager().registerEvents(
-                new AfkListener(afkService),
+                new AfkListener(this, afkService),
                 this
         );
+
         if (settingsConfig.maintenanceEnabled()) {
             try {
                 File maintenanceFile = new File(getDataFolder(), "maintenance.yml");
@@ -804,7 +809,20 @@ public final class OreoEssentials extends JavaPlugin {
         this.invManager = new InventoryManager(this);
         this.invManager.init();
         this.sellGuiManager = new SellGuiManager(this, this.invManager);
+        auctionHouse = new AuctionHouseModule(this);
 
+        if (auctionHouse.enabled()) {
+            if (getCommand("ah") != null) getCommand("ah").setExecutor(new AuctionHouseCommand(auctionHouse));
+            if (getCommand("ahs") != null) getCommand("ahs").setExecutor(new SellCommand(auctionHouse));
+            if (getCommand("ahsearch") != null) getCommand("ahsearch").setExecutor(new SearchCommand(auctionHouse));
+            if (getCommand("ahexpired") != null) getCommand("ahexpired").setExecutor(new ExpiredCommand(auctionHouse));
+            if (getCommand("ahsold") != null) getCommand("ahsold").setExecutor(new SoldCommand(auctionHouse));
+            if (getCommand("ahadmin") != null) getCommand("ahadmin").setExecutor(new AdminCommand(auctionHouse));
+
+            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                new AuctionPlaceholders(auctionHouse).register();
+            }
+        }
         try {
             this.modGuiService = new fr.elias.oreoEssentials.modgui.ModGuiService(this);
             getLogger().info("[ModGUI] Server management GUI ready (/modgui).");

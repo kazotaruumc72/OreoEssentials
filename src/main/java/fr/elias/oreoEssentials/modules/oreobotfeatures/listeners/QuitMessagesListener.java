@@ -4,6 +4,8 @@ import fr.elias.oreoEssentials.util.RankedMessageUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.SoundCategory;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -44,11 +46,9 @@ public final class QuitMessagesListener implements Listener {
         final String playerPrefixFmt = c.getString(SECTION + ".player_prefix", "");
         final String delimiter       = c.getString(SECTION + ".delimiter", " | ");
 
-
         String defaultBody = c.getString(SECTION + ".message", "{name} left the game.");
         String body = RankedMessageUtil.resolveRankedText(c, SECTION, "message", p, defaultBody);
 
-        // Replace placeholders
         final String namePlain = p.getName();
         final String playerName = playerNameFmt.replace("{name}", namePlain);
         body = body.replace("{name}", namePlain);
@@ -57,9 +57,49 @@ public final class QuitMessagesListener implements Listener {
                 ? (playerPrefixFmt + " " + playerName + " " + delimiter + " " + body)
                 : body;
 
+        // Resolve per-rank sound
+        final ResolvedSound sound = resolveSound(c, SECTION, p);
+
         String legacyMsg = legacy.serialize(mm.deserialize(output));
-        Bukkit.getOnlinePlayers().forEach(pl -> pl.sendMessage(legacyMsg));
+        for (Player pl : Bukkit.getOnlinePlayers()) {
+            pl.sendMessage(legacyMsg);
+            if (sound != null) {
+                pl.playSound(pl.getLocation(), sound.key(), SoundCategory.PLAYERS,
+                        sound.volume(), sound.pitch());
+            }
+        }
     }
+
+    // ─── Sound resolution ───
+
+    private static ResolvedSound resolveSound(FileConfiguration c, String section, Player p) {
+        ConfigurationSection sounds = c.getConfigurationSection(section + ".sounds");
+        if (sounds == null) return null;
+
+        float defVolume = (float) sounds.getDouble("volume", 1.0);
+        float defPitch  = (float) sounds.getDouble("pitch", 1.0);
+        String defSound = sounds.getString("default", null);
+
+        var rawList = sounds.getMapList("formats");
+        for (var map : rawList) {
+            Object perm = map.get("permission");
+            Object snd  = map.get("sound");
+            if (perm == null || snd == null) continue;
+            if (p.hasPermission(perm.toString())) {
+                float vol = map.containsKey("volume") ? ((Number) map.get("volume")).floatValue() : defVolume;
+                float pit = map.containsKey("pitch")  ? ((Number) map.get("pitch")).floatValue()  : defPitch;
+                return new ResolvedSound(snd.toString(), vol, pit);
+            }
+        }
+
+        if (defSound != null && !defSound.isEmpty()) {
+            return new ResolvedSound(defSound, defVolume, defPitch);
+        }
+        return null;
+    }
+
+    private record ResolvedSound(String key, float volume, float pitch) {}
+
 
     private boolean shouldDisableBackend(FileConfiguration c, String section) {
         if (!c.getBoolean(section + ".disable_on_backend", false)) return false;

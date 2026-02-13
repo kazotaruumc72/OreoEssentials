@@ -626,6 +626,35 @@ commands:
     description: Manage player warp whitelists
     usage: /pwwhitelist <add|remove> <warp> <player>
     permission: oreo.playerwarps.whitelist
+  ah:
+    description: Open the Auction House browser
+    usage: "/ah"
+    permission: oreo.ah.use
+
+  ahs:
+    description: List the item in your hand on the Auction House
+    usage: "/ahs <price> [hours]"
+    permission: oreo.ah.sell
+
+  ahsearch:
+    description: Search auctions by text
+    usage: "/ahsearch <query...>"
+    permission: oreo.ah.use
+
+  ahsold:
+    description: View your sold auctions
+    usage: "/ahsold"
+    permission: oreo.ah.use
+
+  ahexpired:
+    description: View your expired auctions
+    usage: "/ahexpired"
+    permission: oreo.ah.use
+
+  ahadmin:
+    description: Open Auction House admin panel
+    usage: "/ahadmin"
+    permission: oreo.ah.admin
 
   # ═══════════════════════════════════════════════════════════════
   # CHAT CHANNELS SYSTEM COMMANDS
@@ -882,6 +911,17 @@ permissions:
 
   oreo.jail.manage:
     description: Allows managing jails (/jailedit)
+    default: op
+  oreo.ah.use:
+    description: Use the Auction House
+    default: true
+
+  oreo.ah.sell:
+    description: Sell items on the Auction House
+    default: true
+
+  oreo.ah.admin:
+    description: Access Auction House admin tools
     default: op
 
   oreo.jail.list:

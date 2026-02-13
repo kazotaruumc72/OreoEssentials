@@ -33,7 +33,7 @@ public class InvSeeMenu implements InventoryProvider {
     }
 
     public static void open(OreoEssentials plugin, Player viewer, UUID targetId) {
-        // ✅ BEDROCK PROTECTION - CHECK BEFORE OPENING
+        // EDROCK PROTECTION - CHECK BEFORE OPENING
         if (isBedrockPlayer(targetId)) {
             viewer.sendMessage("§c§lCannot view inventory of Bedrock players!");
             viewer.sendMessage("§7Bedrock items have different NBT data that causes duplication issues.");

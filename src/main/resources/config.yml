@@ -70,11 +70,7 @@ economy:
     password: "postgres211"
     table: "balances"
 
-# Player vaults storage
-playervaults:
-  storage: auto  # Options: auto | yaml | mongodb
-  # "auto" uses mongodb when essentials.storage=mongodb
-  collection: "oreo_playervaults"
+
 
 # Redis cache (optional)
 redis:
@@ -208,7 +204,10 @@ world_nicknames:
 # ==================== PLAYER VAULTS ====================
 
 playervaults:
-  # Storage already defined in STORAGE section above
+# Player vaults storage
+  storage: auto  # Options: auto | yaml | mongodb
+  # "auto" uses mongodb when essentials.storage=mongodb
+  collection: "oreo_playervaults"
 
   # Slots configuration (not rows!)
   slots-cap: 54  # Maximum 1-54 slots
@@ -349,6 +348,20 @@ Join_messages:
       - permission: "oreo.rank.default"
         text: "<gray>[Player]</gray> <white>{name}</white> <gray>joined.</gray>"
 
+  sounds:
+    default: "minecraft:entity.player.levelup"
+    volume: 1.0
+    pitch: 1.0
+    formats:
+      - permission: "oreo.rank.vip"
+        sound: "minecraft:ui.toast.challenge_complete"
+        volume: 1.0
+        pitch: 1.2
+      - permission: "oreo.rank.default"
+        sound: "minecraft:entity.experience_orb.pickup"
+        volume: 1.0
+        pitch: 1.0
+
 # Quit messages
 Quit_messages:
   enable: true
@@ -374,6 +387,19 @@ Quit_messages:
       - permission: "oreo.rank.default"
         text: "<gray>[Player]</gray> <white>{name}</white> <gray>left the game.</gray>"
 
+  sounds:
+    default: "minecraft:entity.enderman.teleport"
+    volume: 1.0
+    pitch: 0.8
+    formats:
+      - permission: "oreo.rank.vip"
+        sound: "minecraft:block.note_block.pling"
+        volume: 1.0
+        pitch: 1.0
+      - permission: "oreo.rank.default"
+        sound: "minecraft:block.note_block.bass"
+        volume: 1.0
+        pitch: 0.8
 # Automatic messages (Oreobot)
 Automatic_message:
   enable: true

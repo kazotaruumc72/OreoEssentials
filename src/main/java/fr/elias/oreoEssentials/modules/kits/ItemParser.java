@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Item parsing utility for kits system.
  *
- * ✅ VERIFIED PERFECT - No user-facing messages, pure utility class.
+ *  VERIFIED PERFECT - No user-facing messages, pure utility class.
  *
  * Supports:
  * - Vanilla items: "DIAMOND_SWORD"
@@ -105,7 +105,6 @@ public final class ItemParser {
         Material shortMat = Material.matchMaterial(d);
         if (shortMat != null) return new ItemStack(shortMat, 1);
 
-        // Parse "type:...,amount:...,enchants:..."
         Matcher mt = TYPE.matcher(d);
         if (!mt.find()) return null;
         Material mat = Material.matchMaterial(mt.group(1).toUpperCase(Locale.ROOT));
