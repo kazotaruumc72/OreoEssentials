@@ -823,6 +823,26 @@ public final class OreoEssentials extends JavaPlugin {
                 new AuctionPlaceholders(auctionHouse).register();
             }
         }
+        if (commandToggleConfig != null) {
+            commandToggleConfig.registerModuleCallback("auctionhouse", () -> {
+                boolean shouldBeEnabled = commandToggleConfig.isCommandEnabled("auctionhouse");
+
+                File ahConfig = new File(getDataFolder(), "auctionhouse/config.yml");
+                org.bukkit.configuration.file.YamlConfiguration ahCfg =
+                        org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(ahConfig);
+                ahCfg.set("enabled", shouldBeEnabled);
+                try {
+                    ahCfg.save(ahConfig);
+                } catch (Exception e) {
+                    getLogger().warning("[CommandToggle] Failed to save AH config: " + e.getMessage());
+                }
+
+                auctionHouse.reload();
+                getLogger().info("[CommandToggle] AuctionHouse module "
+                        + (shouldBeEnabled ? "enabled" : "disabled") + " via toggle.");
+            });
+            getLogger().info("[CommandToggle] AuctionHouse module callback registered.");
+        }
         try {
             this.modGuiService = new fr.elias.oreoEssentials.modgui.ModGuiService(this);
             getLogger().info("[ModGUI] Server management GUI ready (/modgui).");

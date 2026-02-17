@@ -20,7 +20,6 @@ public class CommandToggleService {
         this.config = config;
     }
 
-
     public void applyToggles() {
         try {
             CommandMap commandMap = getCommandMap();
@@ -159,11 +158,10 @@ public class CommandToggleService {
         return null;
     }
 
-    /**
-     * Reload the configuration and reapply toggles
-     */
+
     public void reload() {
         config.reload();
         applyToggles();
+        config.fireAllCallbacks();
     }
 }

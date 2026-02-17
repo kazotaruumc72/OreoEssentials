@@ -14,6 +14,8 @@ public class CommandToggleConfig {
     private String disabledMessage;
     private final Map<String, CommandToggleEntry> commands = new HashMap<>();
 
+    private final Map<String, Runnable> moduleCallbacks = new HashMap<>();
+
     public CommandToggleConfig(JavaPlugin plugin) {
         this.plugin = plugin;
         this.configFile = new File(plugin.getDataFolder(), "commands-toggle.yml");
@@ -71,11 +73,24 @@ public class CommandToggleConfig {
         return new HashMap<>(commands);
     }
 
+    public void registerModuleCallback(String commandName, Runnable onToggle) {
+        moduleCallbacks.put(commandName.toLowerCase(Locale.ROOT), onToggle);
+    }
+
+    public void fireAllCallbacks() {
+        for (Map.Entry<String, Runnable> entry : moduleCallbacks.entrySet()) {
+            entry.getValue().run();
+        }
+    }
+
     public void setCommandEnabled(String commandName, boolean enabled) {
         CommandToggleEntry entry = commands.get(commandName.toLowerCase(Locale.ROOT));
         if (entry != null) {
             entry.setEnabled(enabled);
             save();
+            // Fire the module callback if one is registered
+            Runnable callback = moduleCallbacks.get(commandName.toLowerCase(Locale.ROOT));
+            if (callback != null) callback.run();
         }
     }
 

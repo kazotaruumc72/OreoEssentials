@@ -72,6 +72,10 @@ commands:
     enabled: true
     aliases: ["playerhomes", "checkthomes", "seehomes"]
 
+  auctionhouse:
+    enabled: true
+    aliases: ["ah", "ahs", "ahsearch", "ahexpired", "ahsold", "ahadmin"]
+
   otherhome:
     enabled: true
     aliases: ["playerhome", "checkhome", "seehome", "viewhome"]

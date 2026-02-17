@@ -12,6 +12,9 @@ public class ConfigService {
     public ConfigService(OreoEssentials plugin) {
         this.plugin = plugin;
         FileConfiguration c = plugin.getConfig();
+
+        c.addDefault("logging.debug", false);
+
         c.addDefault("homes.maxPerPlayer", 5);
         c.addDefault("homes.permissionBased", true);
         c.addDefault("tpa.timeoutSeconds", 60);
@@ -24,6 +27,10 @@ public class ConfigService {
         c.addDefault("server.name", Bukkit.getServer().getName());
 
         c.options().copyDefaults(true);
+    }
+
+    public boolean isDebugEnabled() {
+        return plugin.getConfig().getBoolean("logging.debug", false);
     }
 
     public String serverName() {
@@ -57,6 +64,4 @@ public class ConfigService {
         }
         return max;
     }
-
-
 }
