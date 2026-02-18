@@ -1,6 +1,6 @@
 package fr.elias.oreoEssentials.modules.commandtoggle;
 
-import org.bukkit.ChatColor;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,7 +44,7 @@ public class CommandToggleListener implements Listener {
             }
 
             event.setCancelled(true);
-            String disabledMsg = ChatColor.translateAlternateColorCodes('&', config.getDisabledMessage());
+            String disabledMsg = Lang.color(config.getDisabledMessage());
             player.sendMessage(disabledMsg);
 
             plugin.getLogger().info("[CommandToggle] Blocked disabled command '" + commandLabel

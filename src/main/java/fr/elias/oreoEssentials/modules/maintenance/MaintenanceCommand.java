@@ -1,6 +1,7 @@
 package fr.elias.oreoEssentials.modules.maintenance;
 
 import fr.elias.oreoEssentials.OreoEssentials;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -100,7 +101,7 @@ public class MaintenanceCommand implements CommandExecutor, TabCompleter {
         service.enable();
         sender.sendMessage(ChatColor.GREEN + "✓ Maintenance mode enabled!");
 
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',
+        Bukkit.broadcastMessage(Lang.color(
                 "&c&l⚠ MAINTENANCE MODE ENABLED ⚠\n" +
                         "&7The server is entering maintenance mode.\n" +
                         "&7Non-whitelisted players will be kicked."));
@@ -115,7 +116,7 @@ public class MaintenanceCommand implements CommandExecutor, TabCompleter {
         service.disable();
         sender.sendMessage(ChatColor.GREEN + "✓ Maintenance mode disabled!");
 
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',
+        Bukkit.broadcastMessage(Lang.color(
                 "&a&l✓ MAINTENANCE MODE DISABLED ✓\n" +
                         "&7The server is now open to all players."));
     }
@@ -125,12 +126,12 @@ public class MaintenanceCommand implements CommandExecutor, TabCompleter {
 
         if (newState) {
             sender.sendMessage(ChatColor.GREEN + "✓ Maintenance mode enabled!");
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',
+            Bukkit.broadcastMessage(Lang.color(
                     "&c&l⚠ MAINTENANCE MODE ENABLED ⚠\n" +
                             "&7The server is entering maintenance mode."));
         } else {
             sender.sendMessage(ChatColor.GREEN + "✓ Maintenance mode disabled!");
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',
+            Bukkit.broadcastMessage(Lang.color(
                     "&a&l✓ MAINTENANCE MODE DISABLED ✓\n" +
                             "&7The server is now open to all players."));
         }
@@ -363,14 +364,14 @@ public class MaintenanceCommand implements CommandExecutor, TabCompleter {
             case "1":
                 config.setMotdLine1(message);
                 sender.sendMessage(ChatColor.GREEN + "✓ MOTD line 1 updated to: " +
-                        ChatColor.translateAlternateColorCodes('&', message));
+                        Lang.color(message));
                 break;
 
             case "line2":
             case "2":
                 config.setMotdLine2(message);
                 sender.sendMessage(ChatColor.GREEN + "✓ MOTD line 2 updated to: " +
-                        ChatColor.translateAlternateColorCodes('&', message));
+                        Lang.color(message));
                 break;
 
             default:

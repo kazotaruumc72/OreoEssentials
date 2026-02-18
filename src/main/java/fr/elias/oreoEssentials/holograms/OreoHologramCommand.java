@@ -287,10 +287,7 @@ public final class OreoHologramCommand implements TabExecutor {
     }
 
     private static String colorize(String s) {
-        // If user typed MiniMessage, keep it as-is
-        if (s.contains("<") && s.contains(">")) return s;
-        // Otherwise support legacy &
-        return s.replace("&", "§");
+        return fr.elias.oreoEssentials.util.Lang.color(s);
     }
 
     @Override

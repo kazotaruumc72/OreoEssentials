@@ -6,7 +6,7 @@ import fr.elias.oreoEssentials.modules.playervaults.gui.VaultMenu;
 import fr.elias.oreoEssentials.modules.playervaults.gui.VaultView;
 import fr.elias.oreoEssentials.modules.playervaults.storage.MongoPlayerVaultsStorage;
 import fr.elias.oreoEssentials.modules.playervaults.storage.YamlPlayerVaultsStorage;
-import org.bukkit.ChatColor;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -164,7 +164,7 @@ public final class PlayerVaultsService {
     }
 
     private void deny(Player p, String msg) {
-        p.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        p.sendMessage(Lang.color(msg));
         p.playSound(p.getLocation(), cfg.denySound(), 1f, 0.7f);
     }
 

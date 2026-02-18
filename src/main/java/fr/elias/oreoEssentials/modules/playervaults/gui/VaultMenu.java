@@ -9,7 +9,6 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +43,7 @@ public final class VaultMenu {
                 .id("oe_vault_menu")
                 .provider(new Provider(svc, cfg, vaultIds))
                 .size(rows, 9)
-                .title(ChatColor.translateAlternateColorCodes('&', cfg.menuTitle()))
+                .title(Lang.color(cfg.menuTitle()))
                 .build();
     }
 
@@ -74,8 +73,8 @@ public final class VaultMenu {
                 String lore = (unlocked ? cfg.menuItemUnlockedLore() : cfg.menuItemLockedLore())
                         .replace("<id>", String.valueOf(id));
 
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-                meta.setLore(List.of(ChatColor.translateAlternateColorCodes('&', lore)));
+                meta.displayName(Lang.toComponent(name));
+                meta.lore(List.of(Lang.toComponent(lore)));
                 icon.setItemMeta(meta);
 
                 contents.set(i / 9, i % 9, ClickableItem.of(icon, e -> {

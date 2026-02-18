@@ -1,6 +1,7 @@
 package fr.elias.oreoEssentials.modules.playtime;
 
 import fr.elias.oreoEssentials.OreoEssentials;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -335,6 +336,6 @@ public final class PlaytimeRewardsService {
     }
 
     public String color(String s) {
-        return net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', s);
+        return Lang.color(s);
     }
 }

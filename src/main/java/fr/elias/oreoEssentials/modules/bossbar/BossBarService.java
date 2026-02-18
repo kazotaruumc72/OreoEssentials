@@ -1,11 +1,11 @@
 package fr.elias.oreoEssentials.modules.bossbar;
 
 import fr.elias.oreoEssentials.OreoEssentials;
+import fr.elias.oreoEssentials.util.Lang;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -178,6 +178,6 @@ public final class BossBarService implements Listener {
             Component c = MM.deserialize(s);
             s = LEGACY.serialize(c);
         } catch (Throwable ignored) {}
-        return ChatColor.translateAlternateColorCodes('&', s);
+        return Lang.color(s);
     }
 }

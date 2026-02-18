@@ -3,6 +3,7 @@
 package fr.elias.oreoEssentials.modules.nametag;
 
 import fr.elias.oreoEssentials.OreoEssentials;
+import fr.elias.oreoEssentials.util.Lang;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.luckperms.api.LuckPerms;
@@ -10,7 +11,6 @@ import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -165,8 +165,8 @@ public class PlayerNametagManager implements Listener {
             String prefix = replacePlaceholders(this.teamPrefix, player);
             String suffix = replacePlaceholders(this.teamSuffix, player);
 
-            prefix = ChatColor.translateAlternateColorCodes('&', prefix);
-            suffix = ChatColor.translateAlternateColorCodes('&', suffix);
+            prefix = Lang.color(prefix);
+            suffix = Lang.color(suffix);
 
             if (prefix.length() > 16) {
                 prefix = prefix.substring(0, 16);

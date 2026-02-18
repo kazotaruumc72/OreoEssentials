@@ -2,7 +2,7 @@ package fr.elias.oreoEssentials.modules.auctionhouse;
 
 import fr.elias.oreoEssentials.OreoEssentials;
 import fr.elias.oreoEssentials.modules.auctionhouse.models.AuctionCategory;
-import org.bukkit.ChatColor;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -116,7 +116,7 @@ public final class AuctionHouseConfig {
 
     public String getMessage(String key) {
         String raw = messages.getString(key, "&cMissing message: " + key);
-        return ChatColor.translateAlternateColorCodes('&', raw);
+        return Lang.color(raw);
     }
 
     public String getMessage(String key, Map<String, String> placeholders) {

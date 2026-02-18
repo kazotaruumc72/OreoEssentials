@@ -4,10 +4,10 @@ import fr.elias.oreoEssentials.modules.auctionhouse.AuctionHouseModule;
 import fr.elias.oreoEssentials.modules.auctionhouse.models.Auction;
 import fr.elias.oreoEssentials.modules.auctionhouse.models.AuctionCategory;
 import fr.elias.oreoEssentials.modules.auctionhouse.utils.TimeFormatter;
+import fr.elias.oreoEssentials.util.Lang;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.*;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -235,7 +235,7 @@ public class BrowseGUI implements InventoryProvider {
         return head;
     }
 
-    static String c(String s) { return ChatColor.translateAlternateColorCodes('&', s); }
+    static String c(String s) { return Lang.color(s); }
     static ItemStack glass(Material m) { ItemStack i=new ItemStack(m); ItemMeta meta=i.getItemMeta(); meta.setDisplayName(" "); i.setItemMeta(meta); return i; }
     static ItemStack named(Material m, String name) { ItemStack i=new ItemStack(m); ItemMeta meta=i.getItemMeta(); meta.setDisplayName(c(name)); i.setItemMeta(meta); return i; }
     static void click(Player p) { try { p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, .5f, 1f); } catch(Throwable ignored){} }

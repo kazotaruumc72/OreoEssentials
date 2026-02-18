@@ -1,8 +1,8 @@
 package fr.elias.oreoEssentials.modules.maintenance;
 
 import fr.elias.oreoEssentials.OreoEssentials;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -120,7 +120,7 @@ public class MaintenanceService {
      * Kick all non-whitelisted players
      */
     public void kickNonWhitelistedPlayers() {
-        String kickMsg = ChatColor.translateAlternateColorCodes('&', config.getKickMessage());
+        String kickMsg = Lang.color(config.getKickMessage());
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!canJoin(player)) {
@@ -170,7 +170,7 @@ public class MaintenanceService {
         timerTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             if (config.isTimerExpired()) {
                 disable();
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',
+                Bukkit.broadcastMessage(Lang.color(
                         "&a&l✓ MAINTENANCE ENDED\n&7Maintenance mode has been automatically disabled."));
                 stopTimer();
             }

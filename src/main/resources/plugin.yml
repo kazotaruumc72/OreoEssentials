@@ -12,6 +12,7 @@ softdepend:
   - SmartInvs
   - PacketEvents
   - Nexo
+  - ItsMyConfig
 
 loadbefore: [EconomyShopGUI]
 

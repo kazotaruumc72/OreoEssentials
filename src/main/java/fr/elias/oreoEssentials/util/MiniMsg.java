@@ -11,4 +11,8 @@ public final class MiniMsg {
         Component c = MM.deserialize(input);
         return LegacyComponentSerializer.legacySection().serialize(c);
     }
+
+    public static Component toComponent(String input) {
+        return Lang.toComponent(input);
+    }
 }

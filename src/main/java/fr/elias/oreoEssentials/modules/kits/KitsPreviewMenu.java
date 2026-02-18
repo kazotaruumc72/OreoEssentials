@@ -28,10 +28,10 @@ public class KitsPreviewMenu implements InventoryProvider {
     public static void open(KitsManager manager, Player p, Kit kit) {
         int rows = Math.max(1, Math.min(6, manager.kitsCfg()
                 .getInt("menu.preview.rows", 6)));
-        String title = manager.kitsCfg()
-                .getString("menu.preview.title", "&6Preview: &e%kit_name%")
-                .replace("&", "§")
-                .replace("%kit_name%", kit.getDisplayName());
+        String title = fr.elias.oreoEssentials.util.Lang.color(
+                manager.kitsCfg()
+                        .getString("menu.preview.title", "&6Preview: &e%kit_name%")
+                        .replace("%kit_name%", kit.getDisplayName()));
 
         SmartInventory.builder()
                 .id("oreo_kits_preview_" + kit.getId())

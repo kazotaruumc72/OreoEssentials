@@ -4,8 +4,8 @@ package fr.elias.oreoEssentials.modules.playervaults.gui;
 import fr.elias.oreoEssentials.OreoEssentials;
 import fr.elias.oreoEssentials.modules.playervaults.PlayerVaultsConfig;
 import fr.elias.oreoEssentials.modules.playervaults.PlayerVaultsService;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,7 +46,7 @@ public final class VaultView {
                             ItemStack[] initial) {
 
         int size = Math.max(9, rowsVisible * 9);
-        String title = ChatColor.translateAlternateColorCodes('&',
+        String title = Lang.color(
                 cfg.vaultTitle()
                         .replace("<id>", String.valueOf(id))
                         .replace("<rows>", String.valueOf(rowsVisible)));

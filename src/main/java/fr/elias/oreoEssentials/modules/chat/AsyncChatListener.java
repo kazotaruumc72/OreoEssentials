@@ -12,10 +12,10 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import fr.elias.oreoEssentials.util.Lang;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -268,7 +268,7 @@ public final class AsyncChatListener implements Listener {
                     maybeSync(sender, serverName, live.getName(), jsonComponent);
                 }
             } else {
-                String legacy = ChatColor.translateAlternateColorCodes('&', fmt);
+                String legacy = Lang.color(fmt);
                 Component out = LegacyComponentSerializer.legacySection().deserialize(legacy);
 
                 if (hover.isEnabled()) {

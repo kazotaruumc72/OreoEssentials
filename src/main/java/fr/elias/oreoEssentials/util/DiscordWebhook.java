@@ -1,7 +1,7 @@
 package fr.elias.oreoEssentials.util;
 
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 
 import java.io.OutputStream;
@@ -66,8 +66,7 @@ public class DiscordWebhook {
 
     private String stripColors(String s) {
         if (s == null) return "";
-        String noAmp = ChatColor.translateAlternateColorCodes('&', s);
-        return ChatColor.stripColor(noAmp);
+        return PlainTextComponentSerializer.plainText().serialize(Lang.toComponent(s));
     }
 
     private String nullSafe(String s) {
