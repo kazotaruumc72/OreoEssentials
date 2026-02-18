@@ -241,15 +241,7 @@ public final class ReloadAllCommand implements OreoCommand {
         try {
             var core = OreoEssentials.get();
 
-            fr.elias.ultimateChristmas.UltimateChristmas xmasHook = null;
-            try {
-                org.bukkit.plugin.Plugin maybe = core.getServer().getPluginManager().getPlugin("UltimateChristmas");
-                if (maybe instanceof fr.elias.ultimateChristmas.UltimateChristmas uc && maybe.isEnabled()) {
-                    xmasHook = uc;
-                }
-            } catch (Throwable ignored) {}
-
-            var hbl = new fr.elias.oreoEssentials.modules.mobs.HealthBarListener(core, xmasHook);
+            var hbl = new fr.elias.oreoEssentials.modules.mobs.HealthBarListener(core);
 
             if (hbl.isEnabled()) {
                 Bukkit.getPluginManager().registerEvents(hbl, core);
