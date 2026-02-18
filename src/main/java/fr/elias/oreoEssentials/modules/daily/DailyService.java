@@ -1,7 +1,7 @@
 package fr.elias.oreoEssentials.modules.daily;
 
 import fr.elias.oreoEssentials.OreoEssentials;
-import net.md_5.bungee.api.ChatColor;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -30,7 +30,7 @@ public final class DailyService {
 
 
     public String color(String s) {
-        return ChatColor.translateAlternateColorCodes('&', s);
+        return Lang.color(s);
     }
 
     private LocalDate today() {

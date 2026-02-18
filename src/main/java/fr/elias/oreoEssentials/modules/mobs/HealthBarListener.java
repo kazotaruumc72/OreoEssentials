@@ -2,9 +2,9 @@
 package fr.elias.oreoEssentials.modules.mobs;
 
 import fr.elias.oreoEssentials.OreoEssentials;
+import fr.elias.oreoEssentials.util.Lang;
 import fr.elias.ultimateChristmas.UltimateChristmas; // <-- optional soft hook (may be null)
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
@@ -353,7 +353,7 @@ public final class HealthBarListener implements Listener {
         String col = colFor(ratio);
         sb.append(color(col));
         for (int i = 0; i < segments; i++) sb.append(i < fullCount ? fullCh : emptyCh);
-        if (rounded) sb.append(ChatColor.RESET).append(rightEdge);
+        if (rounded) sb.append("§r").append(rightEdge);
         return sb.toString();
     }
 
@@ -364,7 +364,7 @@ public final class HealthBarListener implements Listener {
     }
 
     private static String color(String s) {
-        return ChatColor.translateAlternateColorCodes('&', s);
+        return Lang.color(s);
     }
 
     private static String formatHp(double v) {

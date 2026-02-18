@@ -1,6 +1,7 @@
 package fr.elias.oreoEssentials.modgui.util;
 
-import org.bukkit.ChatColor;
+import fr.elias.oreoEssentials.util.Lang;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -26,7 +27,7 @@ public final class ItemBuilder {
     public ItemBuilder name(String s) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', s));
+            meta.displayName(Lang.toComponent(s));
             item.setItemMeta(meta);
         }
         return this;
@@ -35,10 +36,10 @@ public final class ItemBuilder {
     public ItemBuilder lore(String... ls) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            List<String> lines = Arrays.stream(ls)
-                    .map(x -> ChatColor.translateAlternateColorCodes('&', x))
+            List<Component> lines = Arrays.stream(ls)
+                    .map(Lang::toComponent)
                     .toList();
-            meta.setLore(lines);
+            meta.lore(lines);
             item.setItemMeta(meta);
         }
         return this;

@@ -1,11 +1,8 @@
 package fr.elias.oreoEssentials.modules.bossbar;
 
 import fr.elias.oreoEssentials.OreoEssentials;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -32,9 +29,6 @@ public final class BossBarService implements Listener {
     private long period;
 
     private int taskId = -1;
-
-    private static final MiniMessage MM = MiniMessage.miniMessage();
-    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacySection();
 
     public BossBarService(OreoEssentials plugin) {
         this.plugin = plugin;
@@ -174,10 +168,6 @@ public final class BossBarService implements Listener {
                 s = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(p, s);
             }
         } catch (Throwable ignored) {}
-        try {
-            Component c = MM.deserialize(s);
-            s = LEGACY.serialize(c);
-        } catch (Throwable ignored) {}
-        return ChatColor.translateAlternateColorCodes('&', s);
+        return Lang.color(s);
     }
 }

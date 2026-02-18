@@ -356,7 +356,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             String title = cfg.vaultTitle()
                     .replace("<id>", String.valueOf(vid))
                     .replace("<rows>", String.valueOf(rows));
-            return org.bukkit.ChatColor.translateAlternateColorCodes('&', title);
+            return Lang.color(title);
         }
 
         if (id.equals("homes_used") || id.equals("homes_max") || id.equals("homes")) {

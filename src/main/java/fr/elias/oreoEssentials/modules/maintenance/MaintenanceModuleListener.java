@@ -1,7 +1,7 @@
 package fr.elias.oreoEssentials.modules.maintenance;
 
 import fr.elias.oreoEssentials.OreoEssentials;
-import org.bukkit.ChatColor;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -71,6 +71,6 @@ public class MaintenanceModuleListener implements Listener {
 
     private String color(String s) {
         if (s == null) return "";
-        return ChatColor.translateAlternateColorCodes('&', s);
+        return Lang.color(s);
     }
 }

@@ -3,8 +3,8 @@ package fr.elias.oreoEssentials.modules.clearlag;
 import fr.elias.oreoEssentials.OreoEssentials;
 import fr.elias.oreoEssentials.modules.clearlag.config.ClearLagConfig;
 import fr.elias.oreoEssentials.modules.clearlag.logic.EntityMatcher;
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -295,11 +295,11 @@ public class ClearLagManager {
         if (cfg.broadcast.usePerm()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.hasPermission(cfg.broadcast.perm())) {
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                    p.sendMessage(Lang.color(message));
                 }
             }
         } else {
-            Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
+            Bukkit.getServer().broadcastMessage(Lang.color(message));
         }
     }
 

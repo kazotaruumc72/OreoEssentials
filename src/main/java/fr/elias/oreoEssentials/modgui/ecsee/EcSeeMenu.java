@@ -167,15 +167,15 @@ public class EcSeeMenu implements InventoryProvider {
         ItemMeta m = b.getItemMeta();
         if (m != null) {
             String name = Lang.get("enderchest.gui.locked-slot-name", "&cLocked slot");
-            m.setDisplayName(org.bukkit.ChatColor.translateAlternateColorCodes('&', name));
+            m.displayName(Lang.toComponent(name));
 
             java.util.List<String> rawLore = Lang.getList("enderchest.gui.locked-slot-lore");
-            java.util.List<String> lore = new java.util.ArrayList<>();
+            java.util.List<net.kyori.adventure.text.Component> lore = new java.util.ArrayList<>();
             for (String line : rawLore) {
                 line = line.replace("%slots%", String.valueOf(allowedSlots));
-                lore.add(org.bukkit.ChatColor.translateAlternateColorCodes('&', line));
+                lore.add(Lang.toComponent(line));
             }
-            m.setLore(lore);
+            m.lore(lore);
             b.setItemMeta(m);
         }
         return b;

@@ -3,7 +3,6 @@ package fr.elias.oreoEssentials.modules.enderchest;
 import fr.elias.oreoEssentials.OreoEssentials;
 import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -149,15 +148,15 @@ public class EnderChestService {
         ItemMeta m = b.getItemMeta();
         if (m != null) {
             String name = Lang.get("enderchest.gui.locked-slot-name", "&cLocked slot");
-            m.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+            m.displayName(Lang.toComponent(name));
 
             List<String> rawLore = Lang.getList("enderchest.gui.locked-slot-lore");
-            List<String> lore = new ArrayList<>();
+            List<net.kyori.adventure.text.Component> lore = new ArrayList<>();
             for (String line : rawLore) {
                 line = line.replace("%slots%", String.valueOf(allowedSlots));
-                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+                lore.add(Lang.toComponent(line));
             }
-            m.setLore(lore);
+            m.lore(lore);
 
             m.getPersistentDataContainer().set(LOCK_KEY, PersistentDataType.INTEGER, 1);
             b.setItemMeta(m);

@@ -1,6 +1,7 @@
 // File: src/main/java/fr/elias/oreoEssentials/events/DeathMessageService.java
 package fr.elias.oreoEssentials.modules.events;
 
+import fr.elias.oreoEssentials.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -148,7 +149,7 @@ public final class DeathMessageService {
         return list.get(new Random().nextInt(list.size()));
     }
 
-    private String colorize(String s) { return s.replace("&", "§"); }
+    private String colorize(String s) { return Lang.color(s); }
 
     private String pretty(String key) {
         String n = key.toLowerCase(Locale.ROOT).replace('_', ' ');

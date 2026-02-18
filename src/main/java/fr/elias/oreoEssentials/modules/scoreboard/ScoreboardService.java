@@ -370,7 +370,7 @@ public final class ScoreboardService implements Listener {
         }
 
         //7
-        s = ChatColor.translateAlternateColorCodes('&', s);
+        s = Lang.color(s);
 
         //8
         s = downsampleLegacyHexToLegacy16Safe(s);
