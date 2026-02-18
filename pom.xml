@@ -17,21 +17,29 @@
     </properties>
 
     <build>
-        <defaultGoal>clean package</defaultGoal>
+        <finalName>${project.name}-${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>21</source>
+                    <target>21</target>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -39,27 +47,22 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <relocations>
-                                <relocation>
-                                    <pattern>net.byteflux.libby</pattern>
-                                    <shadedPattern>fr.elias.oreoessentials.libs.libby</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.bstats</pattern>
-                                    <shadedPattern>fr.elias.oreoessentials.libs.bstats</shadedPattern>
-                                </relocation>
-                            </relocations>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>META-INF/maven/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
     <repositories>
@@ -271,8 +274,7 @@
             <groupId>fr.elias</groupId>
             <artifactId>ultimateChristmas</artifactId>
             <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/libs/UltimateChristmas-3.2-SNAPSHOT.jar</systemPath>
+            <scope>sprovided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
