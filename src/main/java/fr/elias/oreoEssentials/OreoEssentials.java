@@ -949,18 +949,9 @@ public final class OreoEssentials extends JavaPlugin {
         }
 
         try {
-            fr.elias.ultimateChristmas.UltimateChristmas xmasHook = null;
-            try {
-                var maybe = getServer().getPluginManager().getPlugin("UltimateChristmas");
-                if (maybe instanceof fr.elias.ultimateChristmas.UltimateChristmas uc && maybe.isEnabled()) {
-                    xmasHook = uc;
-                    getLogger().info("[MOBS] UltimateChristmas hooked.");
-                }
-            } catch (Throwable ignored) {}
-
             if (settingsConfig.mobsHealthbarEnabled()) {
                 try {
-                    var hbl = new fr.elias.oreoEssentials.modules.mobs.HealthBarListener(this, xmasHook);
+                    var hbl = new fr.elias.oreoEssentials.modules.mobs.HealthBarListener(this);
                     this.healthBarListener = hbl;
                     getServer().getPluginManager().registerEvents(hbl, this);
                     getLogger().info("[MOBS] Health bars enabled (settings.yml).");

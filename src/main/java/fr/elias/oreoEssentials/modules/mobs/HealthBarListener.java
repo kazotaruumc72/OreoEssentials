@@ -3,7 +3,6 @@ package fr.elias.oreoEssentials.modules.mobs;
 
 import fr.elias.oreoEssentials.OreoEssentials;
 import fr.elias.oreoEssentials.util.Lang;
-import fr.elias.ultimateChristmas.UltimateChristmas; // <-- optional soft hook (may be null)
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -25,7 +24,6 @@ public final class HealthBarListener implements Listener {
     private static final double DEFAULT_Y_OFFSET = 0.5;
 
     private final OreoEssentials plugin;
-    private final UltimateChristmas xmas; // may be null if UltimateChristmas isn't installed
     private final boolean enabled;
 
     // config
@@ -50,9 +48,8 @@ public final class HealthBarListener implements Listener {
     private BukkitTask sweeper;
 
 
-    public HealthBarListener(OreoEssentials plugin, UltimateChristmas xmasPlugin) {
+    public HealthBarListener(OreoEssentials plugin) {
         this.plugin = plugin;
-        this.xmas = xmasPlugin;
 
         var root = plugin.getConfig().getConfigurationSection("mobs");
         this.enabled = root != null && root.getBoolean("show-healthmobs", false);
@@ -190,18 +187,6 @@ public final class HealthBarListener implements Listener {
         if (le.getType() == EntityType.ARMOR_STAND) return false;
         if (le.getScoreboardTags().contains(HOLO_TAG)) return false;
 
-        try {
-            if (SantaHook.isSanta(le) || GrinchHook.isGrinch(le)) {
-                return false;
-            }
-        } catch (Throwable ignored) {}
-
-        if (xmas != null) {
-            try {
-                if (xmas.isSantaEntity(le)) return false;
-            } catch (Throwable ignored) {}
-        }
-
         if (le instanceof Player) {
             return includePlayers;
         }
@@ -227,10 +212,7 @@ public final class HealthBarListener implements Listener {
 
     private void update(LivingEntity le) {
 
-        if (!hasViewer(le)
-                || SantaHook.isSanta(le)
-                || GrinchHook.isGrinch(le)
-                || (xmas != null && safeIsSantaViaApi(le))) {
+        if (!hasViewer(le)) {
             UUID id = le.getUniqueId();
             removeStand(topLine.remove(id));
             removeStand(bottomLine.remove(id));
@@ -321,11 +303,7 @@ public final class HealthBarListener implements Listener {
                     || as == null
                     || as.isDead()
                     || !as.isValid()
-                    // Hide bars for Santa/Grinch (tool-safe hooks)
-                    || SantaHook.isSanta(le)
-                    || GrinchHook.isGrinch(le)
-                    // Back-compat guard: xmas API if present
-                    || (xmas != null && safeIsSantaViaApi(le))) {
+                    ) {
                 removeStand(as);
                 it.remove();
                 continue;
@@ -405,12 +383,4 @@ public final class HealthBarListener implements Listener {
         }
     }
 
-    /* ---------- Back-compat helper (won't crash if method missing) ---------- */
-    private boolean safeIsSantaViaApi(LivingEntity le) {
-        try {
-            return xmas != null && xmas.isSantaEntity(le);
-        } catch (Throwable ignored) {
-            return false;
-        }
-    }
 }
